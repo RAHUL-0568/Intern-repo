@@ -24,7 +24,8 @@ export default async function UserPage() {
   });
 
   if (!response.ok) {
-    return <p className="p-4 text-red-500">Failed to fetch users.</p>;
+    return <p className="p-4 text-red-500">Failed to fetch users.Please Login first</p>;
+    
   }
 
   const users = await response.json();

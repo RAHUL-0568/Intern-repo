@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Intern Home App",
-  description: "Next.js Internship Project",
+  title: "Intern Web App",
+  description: "Next.js Intern Project",
 };
 
 export default function RootLayout({
@@ -54,7 +54,7 @@ export default function RootLayout({
         <footer className="bg-white border-t text-gray-500">
           <div className="max-w-6xl mx-auto px-6 py-4 flex justify-center items-center">
 
-            ©  Intern Home Page 
+            ©  Intern Web App
           </div>
         </footer>
 

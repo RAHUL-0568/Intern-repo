@@ -1,16 +1,18 @@
 import { query } from "../database/db.js";
 
-export const insertUser = async (name, email,password) => {
+
+//insert user
+export const insertUser = async (name, email,password,profile_url) => {
   const Email = email.trim().toLowerCase();
   const Name = name.trim().toLowerCase();
 
   const sql = `
-    INSERT INTO users (name, email,password)
-    VALUES ($1, $2,$3)
+    INSERT INTO users (name, email,password,profile_url)
+    VALUES ($1, $2,$3,$4)
     RETURNING *
     `;
    try{
-    const { rows } = await query(sql, [Name, Email,password]);
+    const { rows } = await query(sql, [Name, Email,password,profile_url]);
      return rows[0];
     }
      catch(err){

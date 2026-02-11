@@ -1,7 +1,9 @@
 
 import { insertUser,fetchUsers, fetchUserById, deleteUserById, fetchUserByEmail} from "../models/user.models.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import { uploadOnCloudinary } from "../utils/clooudinary.utils.js";
+import { upload } from "../middleware/multer.middleware.js";
 
 // insert user
 export const createUser = async (req,res)=>{
@@ -12,9 +14,20 @@ export const createUser = async (req,res)=>{
      return    res.status(400).json("insert name and email and password")
     }
 
-    // For password hashing
+// for uploads
+  const coverImageLocalPath =req.files?.coverImage?.[0]?.path;
+
+let profileUrl = "";
+
+if (coverImageLocalPath) {
+  const uploaded = await uploadOnCloudinary(coverImageLocalPath);
+
+  profileUrl = uploaded?.secure_url || "";
+}
+
+// For password hashing
     const hashPass = await bcrypt.hash(password,10)
-        const User = await insertUser(name,email,hashPass)
+        const User = await insertUser(name,email,hashPass,profileUrl)
          res.status(200).json(User)
      } 
      catch (err) {
@@ -25,9 +38,7 @@ export const createUser = async (req,res)=>{
     }
      console.error("User Insertion Error", err);   
      res.status(500).json(err);
-}
-
-}
+}}
 
 // get all users
 export const getUsers = async(req,res)=>{
@@ -36,11 +47,8 @@ try{
     res.status(200).json(Users)
 
 }catch(err){
-    
     res.status(500).json({ error: err.message });
-
-}
-}
+}}
 
 // get User by id
 export const getUserById = async (req, res) => {

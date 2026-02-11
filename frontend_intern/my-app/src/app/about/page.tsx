@@ -23,7 +23,7 @@ export default function Home() {
             </div>
 
             <div className="col-lg-6">
-              <img src="/about.svg" alt="Banner Image" className="img-fluid w-100 d-block" />
+              <img src="/about.svg" alt="Banner Image" className="img-fluid w-50 d-block" />
             </div>
 
           </div>

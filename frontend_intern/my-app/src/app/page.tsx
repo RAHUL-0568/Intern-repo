@@ -1,5 +1,6 @@
 import Link from "next/link";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Counter}  from "./components/counter";
 
 export default function Home() {
   return (
@@ -19,12 +20,16 @@ export default function Home() {
                   Intern Web
                 </h1>
               </div>
+
+
             
             </div>
 
             <div className="col-lg-6">
               <img src="/Banner.svg" alt="Banner Image" className="img-fluid w-100 d-block" />
             </div>
+
+          
 
           </div>
         </div>
