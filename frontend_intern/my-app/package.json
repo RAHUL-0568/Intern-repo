@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build"
-    
   },
   "dependencies": {
+    "base64-img": "^1.0.4",
     "bootstrap": "^5.3.8",
     "next": "16.1.4",
     "react": "19.2.3",

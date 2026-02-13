@@ -1,5 +1,5 @@
 
-import { insertUser,fetchUsers, fetchUserById, deleteUserById, fetchUserByEmail} from "../models/user.models.js";
+import { insertUser,fetchUsers, fetchUserById, deleteUserBy, fetchUserByEmail, putUser} from "../models/user.models.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { uploadOnCloudinary } from "../utils/clooudinary.utils.js";
@@ -38,7 +38,7 @@ if (coverImageLocalPath) {
     }
      console.error("User Insertion Error", err);   
      res.status(500).json(err);
-}}
+     }}
 
 // get all users
 export const getUsers = async(req,res)=>{
@@ -56,7 +56,7 @@ export const getUserById = async (req, res) => {
     const id = req.params.id
     const user = await fetchUserById(id);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "  User not found" });
     }
     res.json(user);
   } catch (err) {
@@ -67,11 +67,12 @@ export const getUserById = async (req, res) => {
 };
 
 //delete user by id
-export const deleteUser= async (req, res) => {
+export const deleteU= async (req, res) => {
   try {
+    
     const id = req.params.id;
     
-    const deleteUser = await deleteUserById(id);
+    const deleteUser = await deleteUserBy(id);
     if (!deleteUser) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -115,3 +116,55 @@ export const UserLogin =async(req,res)=>{
     
   }
 }
+
+
+
+// put user
+export const updateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let { name, email, password, profileUrl } = req.body;
+
+    const user = await fetchUserById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // upload image
+    const coverImageLocalPath = req.files?.coverImage?.[0]?.path;
+
+    if (coverImageLocalPath) {
+      const uploaded = await uploadOnCloudinary(coverImageLocalPath);
+      profileUrl = uploaded?.secure_url || user.profile_url;
+      
+
+    }
+
+    // password hashing only if provided
+    let hashPass = user.password;
+    if (password) {
+      hashPass = await bcrypt.hash(password, 10);
+    }
+
+    const updatedUser = await putUser(
+      id,
+      name,
+      email,
+      hashPass,
+      profileUrl
+    );
+
+    res.status(200).json(updatedUser);
+
+  } catch (err) {
+    if (err.message === "Username or Email already exists") {
+      return res.status(409).json(
+        "Username or Email address is already in use."
+      );
+    }
+
+    console.error("User Update Error", err);
+    res.status(500).json(err);
+  }
+};

@@ -6,13 +6,15 @@ export default function Page() {
   async function insert(formData:FormData) {
     "use server";
 
-    const cookieStore = await cookies();
+     const cookieStore = await cookies();
   const token = cookieStore.get("session_token")?.value;
+
 
    
     const name = formData.get("name");
     const email = formData.get("email");
     const password = formData.get("password");
+    const coverImage =formData.get("coverImage")
     
 
     if(!name){
@@ -30,11 +32,10 @@ export default function Page() {
     const res = await fetch("http://localhost:3000/users", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
        cache: "no-store",
-      body: JSON.stringify({ name, email,password }),
+      body:formData
     });
 
      
@@ -45,8 +46,6 @@ if (res.status === 409) {
 if (!res.ok) {
   throw new Error("user must be Logged in First");
 }
-
- 
     redirect("/users")
   }
 
@@ -72,7 +71,7 @@ if (!res.ok) {
         <h3 style={{ textAlign: "center", marginBottom: "20px",color:"black" }}>
           User Insertion Form
         </h3>
-
+<label>Username </label>
         <input
           name="name"
           placeholder="Name"
@@ -87,6 +86,7 @@ if (!res.ok) {
           }}
         />
 
+        <label>Email</label>
         <input
           name="email"
           type="email"
@@ -101,6 +101,7 @@ if (!res.ok) {
             color: "black"
           }}
         />
+        <label>Password</label>
         <input
           name="password"
           type="password"
@@ -116,10 +117,29 @@ if (!res.ok) {
           }}
         />
 
+        <div >
+  <label >
+    Upload Photo
+  </label>
+
+  <input
+    type="file"
+    name="coverImage"
+    style={{
+      padding: "6px",
+      border: "1px solid #ccc",borderRadius: "4px",backgroundColor: "#fff",color: "black",
+      
+    }}
+  />
+</div>
+
+        <br />
+
+
         <button
           type="submit"
           style={{
-            backgroundColor: "#2563eb",
+            backgroundColor: "#319c16",
             color: "white",
             width: "100%",
             padding: "10px",
